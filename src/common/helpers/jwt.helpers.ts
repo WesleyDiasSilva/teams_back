@@ -26,3 +26,15 @@ export function verifyToken(token: string) {
     return null;
   }
 }
+
+export function decodeToken(token: string) {
+  return jwt.decode(token);
+}
+
+export async function generateRememberPasswordToken(code: string) {
+  return {
+    code: jwt.sign({ code }, JWT_SECRET, {
+      expiresIn: '15m',
+    }),
+  };
+}

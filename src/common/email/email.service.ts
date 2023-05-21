@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { getConfirmationEmailTemplate } from './templates/confirmationEmailTemplate';
+import { getResetPasswordEmailTemplate } from './templates/getResetPasswordEmailTemplate';
 
 @Injectable()
 export class EmailService {
@@ -27,6 +28,18 @@ export class EmailService {
       from: process.env.OUTLOOK_USERNAME,
       to: to,
       subject: 'Confirme seu endereço de email',
+      html: html,
+    });
+
+    console.log(`Message sent: ${info.messageId}`);
+  }
+
+  async sendRememberPasswordEmail(to: string, code: string) {
+    const html = getResetPasswordEmailTemplate(code);
+    const info: nodemailer.SentMessageInfo = await this.transporter.sendMail({
+      from: process.env.OUTLOOK_USERNAME,
+      to: to,
+      subject: 'Alteração de senha',
       html: html,
     });
 

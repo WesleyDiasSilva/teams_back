@@ -12,6 +12,52 @@ export class AuthRepository {
     });
   }
 
+  async deleteRememberCode(token: string) {
+    return await this.prismaClient.rememberCode.delete({
+      where: {
+        token,
+      },
+    });
+  }
+
+  async updatePassword(user_id: number, password: string) {
+    return await this.prismaClient.user.update({
+      where: {
+        id: user_id,
+      },
+      data: {
+        password,
+      },
+    });
+  }
+
+  async saveCodeRememberPassword(user_id: number, token: string) {
+    return await this.prismaClient.rememberCode.upsert({
+      where: {
+        user_id,
+      },
+      update: {
+        token,
+      },
+      create: {
+        token,
+        user_id,
+      },
+    });
+  }
+
+  async getCodeRememberPassword(user_id: number) {
+    return await this.prismaClient.rememberCode.findMany({
+      where: {
+        user_id,
+      },
+      orderBy: {
+        id: 'desc',
+      },
+      take: 1,
+    });
+  }
+
   async findUserByEmail(email: string) {
     return await this.prismaClient.user.findUnique({
       where: {
