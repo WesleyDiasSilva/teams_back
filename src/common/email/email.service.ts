@@ -35,7 +35,7 @@ export class EmailService {
   }
 
   async sendRememberPasswordEmail(to: string, code: string) {
-    const html = getResetPasswordEmailTemplate(code);
+    const html = getResetPasswordEmailTemplate(code, to);
     const info: nodemailer.SentMessageInfo = await this.transporter.sendMail({
       from: process.env.OUTLOOK_USERNAME,
       to: to,
