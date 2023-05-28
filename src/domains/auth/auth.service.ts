@@ -132,7 +132,16 @@ export class AuthService {
     if (user.is_email_verified === false) {
       throw new UnauthorizedException('E-mail não validado');
     }
-    return this.manageToken(user);
+    return {
+      user: {
+        token: await this.manageToken(user),
+        name: user.name,
+        last_name: user.last_name,
+        email: user.email,
+        image: user.image,
+        id: user.id,
+      },
+    };
   }
 
   async validateEmail(code: string) {

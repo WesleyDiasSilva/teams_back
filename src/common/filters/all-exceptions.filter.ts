@@ -16,10 +16,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const status =
       exception instanceof HttpException ? exception.getStatus() : 500;
 
+    let message = 'Um erro aconteceu!';
+    if (exception instanceof HttpException) {
+      message = exception.message as string;
+    }
+
     response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
+      message: message,
     });
   }
 }
